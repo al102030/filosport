@@ -10,13 +10,17 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/filoDB"
 mongodb_client = PyMongo(app)
 my_db = mongodb_client.db
 collection = my_db['predict']
-results = collection.find()
-predicts = sorted(results, key=lambda x: x['createDatetime'])
-
-date_str = "1401/10/17 02:08:40"
 
 
-dates = [doc for doc in predicts if doc['createDatetime'] > date_str]
+date_str = "1401/11/01 02:08:40"
+
+
+query = {
+    'createDatetime': {'$gt': date_str}
+}
+
+comments = collection.find(query).sort('createDatetime', 1)
+dates = list(comments)
 
 dates_dict = {}
 
